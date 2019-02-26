@@ -68,7 +68,7 @@ class TestCreateUser {
 		assertTrue(userId.length() == 30);
 		
 		//Changing the response body into String followed by JSON
-		String bodyString = response.body().toString();
+		String bodyString = response.body().asString();
 		try {
 			JSONObject responseBodyJson = new JSONObject(bodyString);
 			JSONArray addresses = responseBodyJson.getJSONArray("addresses");
