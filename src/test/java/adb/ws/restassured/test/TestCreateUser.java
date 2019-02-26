@@ -7,7 +7,12 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +65,25 @@ class TestCreateUser {
 		
 		String userId = response.jsonPath().getString("userId");
 		assertNotNull(userId);
+		assertTrue(userId.length() == 30);
+		
+		//Changing the response body into String followed by JSON
+		String bodyString = response.body().toString();
+		try {
+			JSONObject responseBodyJson = new JSONObject(bodyString);
+			JSONArray addresses = responseBodyJson.getJSONArray("addresses");
+			
+			assertNotNull(addresses);
+			assertTrue(addresses.length() == 2);
+			
+			String addressId = addresses.getJSONObject(0).getString("addressId");
+			assertNotNull(addressId);
+			assertTrue(addressId.length() == 30);
+			
+		} catch (JSONException e) {
+			fail(e.getMessage());
+		}
+		
 	}
 
 }
