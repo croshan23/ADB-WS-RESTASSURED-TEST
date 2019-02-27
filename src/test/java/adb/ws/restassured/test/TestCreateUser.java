@@ -53,10 +53,10 @@ class TestCreateUser {
 		userAddresses.add(billingAddress);
 
 		Map<String, Object> userDetails = new HashMap<>();
-		userDetails.put("firstName", "Sergey");
-		userDetails.put("lastName", "Kargopolov");
-		userDetails.put("email", "sergey.kargopolov@swiftdeveloperblog.com");
-		userDetails.put("password", "123");
+		userDetails.put("firstName", "Roshan");
+		userDetails.put("lastName", "Chaudhary");
+		userDetails.put("email", "rchaudhary@mum.edu");
+		userDetails.put("password", "12345");
 		userDetails.put("addresses", userAddresses);
 
 		Response response = given().contentType("application/json").accept("application/json").body(userDetails).when()
