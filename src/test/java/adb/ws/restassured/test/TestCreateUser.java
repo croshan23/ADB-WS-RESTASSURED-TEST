@@ -76,7 +76,7 @@ class TestCreateUser {
 			assertNotNull(addresses);
 			assertTrue(addresses.length() == 2);
 			
-			String addressId = addresses.getJSONObject(0).getString("addressId");
+			String addressId = addresses.getJSONObject(0).getString("adddressId");
 			assertNotNull(addressId);
 			assertTrue(addressId.length() == 30);
 			

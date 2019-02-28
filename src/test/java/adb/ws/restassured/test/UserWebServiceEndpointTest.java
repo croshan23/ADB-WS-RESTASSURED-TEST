@@ -6,17 +6,22 @@ import static org.junit.Assert.assertNotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runners.MethodSorters;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class UserWebServiceEndpointTest {
 
 	private final String CONTEXT_PATH = "/adb-ws";
 	private final String EMAIL_ADDRESS = "rchaudhary@mum.edu";
 	private final String JSON = "application/json";
+	private static String authorizationHeader;
+	private static String userId;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -24,8 +29,11 @@ class UserWebServiceEndpointTest {
 		RestAssured.port = 8080;
 	}
 
+	/*
+	 * Test User Login
+	 */
 	@Test
-	void testUserLogin() {
+	void a() {
 
 		Map<String, String> loginDetails = new HashMap<>();
 		loginDetails.put("email", EMAIL_ADDRESS);
@@ -33,12 +41,27 @@ class UserWebServiceEndpointTest {
 
 		Response response = given().contentType(JSON).accept(JSON).body(loginDetails).when()
 				.post(CONTEXT_PATH + "/users/login").then().statusCode(200).extract().response();
-		
-		String authorizationHeader = response.header("Authorization");
-		String userId = response.header("UserID");
-		
+
+		authorizationHeader = response.header("Authorization");
+		userId = response.header("UserID");
+
 		assertNotNull(authorizationHeader);
 		assertNotNull(userId);
 	}
 
+	/*
+	 * Test Get User Details
+	 */
+	@Test
+	void b() {
+
+		Response response = given().header("Authorization", authorizationHeader).accept(JSON).when()
+				.get(CONTEXT_PATH + "/users/" + userId).then().statusCode(200).contentType(JSON).extract().response();
+		
+		String userPublicId = response.jsonPath().getString("userId");
+		String userEmail = response.jsonPath().getString("email");
+		
+		assertNotNull(userPublicId);
+		assertNotNull(userEmail);
+	}
 }
